@@ -8,7 +8,6 @@ import java.util.Random;
 import com.poker.player.Player;
 import com.poker.pots.PotManager;
 import com.poker.pots.PotWinner;
-import com.poker.rounds.Round;
 
 import java.util.*;
 
@@ -35,8 +34,6 @@ public class GameTable {
     private int playerToActIndex;
     private Player playerToAct;
 
-    private final List<Round> rounds;
-
     /**
      * We define a game table with the players sitting at the table, the values for
      * the small blind and the big blinds, which we are going to keep constant for
@@ -52,7 +49,6 @@ public class GameTable {
         this.bigBlind = bigBlind;
         this.tableCards = new ArrayList<Card>();
         activePlayers = new ArrayList<Player>();
-        rounds = Round.getHoldemRounds();
         deck = new Deck();
     }
 
@@ -113,7 +109,7 @@ public class GameTable {
         // In our defined rounds for this poker game (we have it currently defined to follow the rules of NL holdem),
         // process each round accordingly. Deal cards, let players perform their actions, then cleanup the state
         // at the end of each betting round to prepare for the round.
-        for (Round round : rounds) {
+        for (RoundEnum round : RoundEnum.values()) {
             if (activePlayers.size() <= 1) {
                 break;
             }
@@ -255,7 +251,7 @@ public class GameTable {
      * @param round: Round obj that has info regarding how many cards should be burned (discarded) and how many should be
      *               dealt.
      */
-    private void dealTableCards(Round round) {
+    private void dealTableCards(RoundEnum round) {
         int numCardsToBurn = round.getCardsToBurn();
 
         // Discard the burn cards.
@@ -285,7 +281,7 @@ public class GameTable {
      * Display the cards that were dealt for the given round.
      * @param round
      */
-    private void displayDeal(Round round) {
+    private void displayDeal(RoundEnum round) {
         display(String.format("Dealing %s: %s", round, tableCards));
     }
 

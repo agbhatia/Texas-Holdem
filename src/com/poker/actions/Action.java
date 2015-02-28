@@ -9,19 +9,16 @@ package com.poker.actions;
 abstract public class Action {
     private final ActionEnum actionEnum;
     protected final int incrementAmount;
-    protected final int totalAmount;
     protected final String desc;
 
     public Action(ActionEnum actionEnum, String desc) {
         this.actionEnum = actionEnum;
         incrementAmount = 0;
-        totalAmount = 0;
         this.desc = desc;
     }
 
     public Action(ActionEnum actionEnum, int incrementAmount, String desc) {
         this.incrementAmount = incrementAmount;
-        this.totalAmount = 0;
         this.actionEnum = actionEnum;
         this.desc = desc;
     }
@@ -32,10 +29,6 @@ abstract public class Action {
 
     public int getIncrementAmount() {
         return incrementAmount;
-    }
-
-    public int getTotalAmount() {
-        return totalAmount;
     }
 
     public String toString() {
