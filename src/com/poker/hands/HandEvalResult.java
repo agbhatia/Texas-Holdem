@@ -24,7 +24,7 @@ public class HandEvalResult implements Comparable<HandEvalResult> {
         return matches;
     }
 
-    public HandResult result() {
+    public HandResult getResult() {
         return result;
     }
 
@@ -34,11 +34,11 @@ public class HandEvalResult implements Comparable<HandEvalResult> {
 
     @Override
     public int compareTo(HandEvalResult otherResult) {
-        int myResultOrdinal = this.result.ordinal();
-        int otherResultOrdinal = otherResult.result.ordinal();
-        if (myResultOrdinal > otherResultOrdinal) {
+        int myValue = this.getResult().getValue();
+        int otherValue = otherResult.getResult().getValue();
+        if (myValue > otherValue) {
             return -1;
-        } else if (myResultOrdinal < otherResultOrdinal) {
+        } else if (myValue < otherValue) {
             return 1;
         } else {
             // If equal, check the score

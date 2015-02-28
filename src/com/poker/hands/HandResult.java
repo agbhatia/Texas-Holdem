@@ -27,4 +27,8 @@ public enum HandResult {
     public String toString() {
         return description;
     }
+
+    public int getValue() {
+        return value;
+    }
 }

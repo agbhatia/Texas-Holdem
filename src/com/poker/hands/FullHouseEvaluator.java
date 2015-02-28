@@ -1,6 +1,10 @@
 package com.poker.hands;
 
 import com.poker.Card;
+import com.poker.RankEnum;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by atul on 2/25/15.
@@ -12,26 +16,25 @@ public class FullHouseEvaluator extends HandEvaluator {
         super();
     }
 
-    public HandEvalResult evaluate(Card[] cards) {
-        int[] scores = new int[4];
+    public HandEvalResult evaluate(List<Card> cards) {
+        List<RankEnum> scores = new ArrayList<>();
         int finalScore = 0;
 
         // First find the highest number that repeats exactly 3 times. We don't worry about catching the case
         // where it repeats more than three times, because that will already be caught by the fourofakind
         // evaluator.
-        int result = this.findHighestDuplicate(cards, 3);
-
-        boolean isMatch = (result > -1);
+        RankEnum result = this.findHighestDuplicate(cards, 3);
+        boolean isMatch = (result != null);
 
         if (isMatch) {
             // Now that we found a set of 3, we need to find a pair to go along with it to complete the full
             // house. If we find it, then we have a full house.
-            Pair pairs = this.findTopNPairs(cards, 1);
-            isMatch = pairs.foundAllPairs;
+            List<RankEnum> pairs = this.findTopNPairs(cards, 1);
+            isMatch = pairs.size() >= 1;
             if (isMatch) {
                 // Make sure that the three of a kind is weighted more.
-                scores[0] = result;
-                scores[1] = pairs.pairs[0];
+                scores.add(result);
+                scores.add(pairs.get(0));
                 finalScore = calculateScore(scores);
             }
         }

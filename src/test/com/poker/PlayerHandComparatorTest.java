@@ -1,6 +1,8 @@
 package test.com.poker;
 
 import com.poker.Card;
+import com.poker.RankEnum;
+import com.poker.SuitEnum;
 import com.poker.hands.Hand;
 
 import junit.framework.TestCase;
@@ -23,48 +25,48 @@ public class PlayerHandComparatorTest extends TestCase {
      */
     public void testFlushvsFlush() {
         List<Hand> hands = new ArrayList<Hand>();
-        Card[] cards1 = new Card[7];
-        cards1[0] = new Card(Card.CardRank.ACE, Card.CardSuit.HEARTS);
-        cards1[1] = new Card(Card.CardRank.TEN, Card.CardSuit.HEARTS);
-        cards1[2] = new Card(Card.CardRank.NINE, Card.CardSuit.HEARTS);
-        cards1[3] = new Card(Card.CardRank.TEN, Card.CardSuit.CLUBS);
-        cards1[4] = new Card(Card.CardRank.SEVEN, Card.CardSuit.HEARTS);
-        cards1[5] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards1[6] = new Card(Card.CardRank.JACK, Card.CardSuit.HEARTS);
+        List<Card> cards1 = new ArrayList<>();
+        cards1.add(new Card(RankEnum.ACE, SuitEnum.HEARTS));
+        cards1.add(new Card(RankEnum.TEN, SuitEnum.HEARTS));
+        cards1.add(new Card(RankEnum.NINE, SuitEnum.HEARTS));
+        cards1.add(new Card(RankEnum.TEN, SuitEnum.CLUBS));
+        cards1.add(new Card(RankEnum.SEVEN, SuitEnum.HEARTS));
+        cards1.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards1.add(new Card(RankEnum.JACK, SuitEnum.HEARTS));
         Hand hand1 = new Hand(cards1);
         hands.add(hand1);
 
-        Card[] cards2 = new Card[7];
-        cards2[0] = new Card(Card.CardRank.ACE, Card.CardSuit.HEARTS);
-        cards2[1] = new Card(Card.CardRank.QUEEN, Card.CardSuit.HEARTS);
-        cards2[2] = new Card(Card.CardRank.NINE, Card.CardSuit.HEARTS);
-        cards2[3] = new Card(Card.CardRank.TEN, Card.CardSuit.CLUBS);
-        cards2[4] = new Card(Card.CardRank.SEVEN, Card.CardSuit.HEARTS);
-        cards2[5] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards2[6] = new Card(Card.CardRank.JACK, Card.CardSuit.HEARTS);
+        List<Card> cards2 = new ArrayList<>();
+        cards2.add(new Card(RankEnum.ACE, SuitEnum.HEARTS));
+        cards2.add(new Card(RankEnum.QUEEN, SuitEnum.HEARTS));
+        cards2.add(new Card(RankEnum.NINE, SuitEnum.HEARTS));
+        cards2.add(new Card(RankEnum.TEN, SuitEnum.CLUBS));
+        cards2.add(new Card(RankEnum.SEVEN, SuitEnum.HEARTS));
+        cards2.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards2.add(new Card(RankEnum.JACK, SuitEnum.HEARTS));
         Hand hand2 = new Hand(cards2);
         hands.add(hand2);
 
-        Card[] cards3 = new Card[7];
-        cards3[0] = new Card(Card.CardRank.TEN, Card.CardSuit.HEARTS);
-        cards3[1] = new Card(Card.CardRank.QUEEN, Card.CardSuit.HEARTS);
-        cards3[2] = new Card(Card.CardRank.NINE, Card.CardSuit.HEARTS);
-        cards3[3] = new Card(Card.CardRank.TEN, Card.CardSuit.CLUBS);
-        cards3[4] = new Card(Card.CardRank.SEVEN, Card.CardSuit.HEARTS);
-        cards3[5] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards3[6] = new Card(Card.CardRank.JACK, Card.CardSuit.HEARTS);
+        List<Card> cards3 = new ArrayList<>();
+        cards3.add(new Card(RankEnum.TEN, SuitEnum.HEARTS));
+        cards3.add(new Card(RankEnum.QUEEN, SuitEnum.HEARTS));
+        cards3.add(new Card(RankEnum.NINE, SuitEnum.HEARTS));
+        cards3.add(new Card(RankEnum.TEN, SuitEnum.CLUBS));
+        cards3.add(new Card(RankEnum.SEVEN, SuitEnum.HEARTS));
+        cards3.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards3.add(new Card(RankEnum.JACK, SuitEnum.HEARTS));
         Hand hand3 = new Hand(cards3);
         hands.add(hand3);
 
 
-        Card[] cards4 = new Card[7];
-        cards4[0] = new Card(Card.CardRank.KING, Card.CardSuit.HEARTS);
-        cards4[1] = new Card(Card.CardRank.TWO, Card.CardSuit.HEARTS);
-        cards4[2] = new Card(Card.CardRank.THREE, Card.CardSuit.HEARTS);
-        cards4[3] = new Card(Card.CardRank.TEN, Card.CardSuit.CLUBS);
-        cards4[4] = new Card(Card.CardRank.FOUR, Card.CardSuit.HEARTS);
-        cards4[5] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards4[6] = new Card(Card.CardRank.FIVE, Card.CardSuit.HEARTS);
+        List<Card> cards4 = new ArrayList<>();
+        cards4.add(new Card(RankEnum.KING, SuitEnum.HEARTS));
+        cards4.add(new Card(RankEnum.TWO, SuitEnum.HEARTS));
+        cards4.add(new Card(RankEnum.THREE, SuitEnum.HEARTS));
+        cards4.add(new Card(RankEnum.TEN, SuitEnum.CLUBS));
+        cards4.add(new Card(RankEnum.FOUR, SuitEnum.HEARTS));
+        cards4.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards4.add(new Card(RankEnum.FIVE, SuitEnum.HEARTS));
         Hand hand4 = new Hand(cards4);
         hands.add(hand4);
 
@@ -77,49 +79,49 @@ public class PlayerHandComparatorTest extends TestCase {
 
     public void testStraightvsStraight() {
         List<Hand> hands = new ArrayList<Hand>();
-        Card[] cards1 = new Card[7];
+        List<Card> cards1 = new ArrayList<>();
 
-        cards1[0] = new Card(Card.CardRank.ACE, Card.CardSuit.DIAMONDS);
-        cards1[1] = new Card(Card.CardRank.TEN, Card.CardSuit.CLUBS);
-        cards1[2] = new Card(Card.CardRank.NINE, Card.CardSuit.HEARTS);
-        cards1[3] = new Card(Card.CardRank.QUEEN, Card.CardSuit.CLUBS);
-        cards1[4] = new Card(Card.CardRank.KING, Card.CardSuit.HEARTS);
-        cards1[5] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards1[6] = new Card(Card.CardRank.JACK, Card.CardSuit.SPADES);
+        cards1.add(new Card(RankEnum.ACE, SuitEnum.DIAMONDS));
+        cards1.add(new Card(RankEnum.TEN, SuitEnum.CLUBS));
+        cards1.add(new Card(RankEnum.NINE, SuitEnum.HEARTS));
+        cards1.add(new Card(RankEnum.QUEEN, SuitEnum.CLUBS));
+        cards1.add(new Card(RankEnum.KING, SuitEnum.HEARTS));
+        cards1.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards1.add(new Card(RankEnum.JACK, SuitEnum.SPADES));
         Hand hand1 = new Hand(cards1);
         hands.add(hand1);
 
-        Card[] cards2 = new Card[7];
-        cards2[0] = new Card(Card.CardRank.ACE, Card.CardSuit.DIAMONDS);
-        cards2[1] = new Card(Card.CardRank.TWO, Card.CardSuit.SPADES);
-        cards2[2] = new Card(Card.CardRank.THREE, Card.CardSuit.HEARTS);
-        cards2[3] = new Card(Card.CardRank.FOUR, Card.CardSuit.CLUBS);
-        cards2[4] = new Card(Card.CardRank.FIVE, Card.CardSuit.HEARTS);
-        cards2[5] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards2[6] = new Card(Card.CardRank.JACK, Card.CardSuit.HEARTS);
+        List<Card> cards2 = new ArrayList<>();
+        cards2.add(new Card(RankEnum.ACE, SuitEnum.DIAMONDS));
+        cards2.add(new Card(RankEnum.TWO, SuitEnum.SPADES));
+        cards2.add(new Card(RankEnum.THREE, SuitEnum.HEARTS));
+        cards2.add(new Card(RankEnum.FOUR, SuitEnum.CLUBS));
+        cards2.add(new Card(RankEnum.FIVE, SuitEnum.HEARTS));
+        cards2.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards2.add(new Card(RankEnum.JACK, SuitEnum.HEARTS));
         Hand hand2 = new Hand(cards2);
         hands.add(hand2);
 
-        Card[] cards3 = new Card[7];
-        cards3[0] = new Card(Card.CardRank.EIGHT, Card.CardSuit.DIAMONDS);
-        cards3[1] = new Card(Card.CardRank.QUEEN, Card.CardSuit.CLUBS);
-        cards3[2] = new Card(Card.CardRank.NINE, Card.CardSuit.SPADES);
-        cards3[3] = new Card(Card.CardRank.TEN, Card.CardSuit.CLUBS);
-        cards3[4] = new Card(Card.CardRank.KING, Card.CardSuit.HEARTS);
-        cards3[5] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards3[6] = new Card(Card.CardRank.JACK, Card.CardSuit.HEARTS);
+        List<Card> cards3 = new ArrayList<>();
+        cards3.add(new Card(RankEnum.EIGHT, SuitEnum.DIAMONDS));
+        cards3.add(new Card(RankEnum.QUEEN, SuitEnum.CLUBS));
+        cards3.add(new Card(RankEnum.NINE, SuitEnum.SPADES));
+        cards3.add(new Card(RankEnum.TEN, SuitEnum.CLUBS));
+        cards3.add(new Card(RankEnum.KING, SuitEnum.HEARTS));
+        cards3.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards3.add(new Card(RankEnum.JACK, SuitEnum.HEARTS));
         Hand hand3 = new Hand(cards3);
         hands.add(hand3);
 
 
-        Card[] cards4 = new Card[7];
-        cards4[0] = new Card(Card.CardRank.EIGHT, Card.CardSuit.DIAMONDS);
-        cards4[1] = new Card(Card.CardRank.TEN, Card.CardSuit.HEARTS);
-        cards4[2] = new Card(Card.CardRank.JACK, Card.CardSuit.HEARTS);
-        cards4[3] = new Card(Card.CardRank.TWO, Card.CardSuit.CLUBS);
-        cards4[4] = new Card(Card.CardRank.QUEEN, Card.CardSuit.HEARTS);
-        cards4[5] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards4[6] = new Card(Card.CardRank.FIVE, Card.CardSuit.SPADES);
+        List<Card> cards4 = new ArrayList<>();
+        cards4.add(new Card(RankEnum.EIGHT, SuitEnum.DIAMONDS));
+        cards4.add(new Card(RankEnum.TEN, SuitEnum.HEARTS));
+        cards4.add(new Card(RankEnum.JACK, SuitEnum.HEARTS));
+        cards4.add(new Card(RankEnum.TWO, SuitEnum.CLUBS));
+        cards4.add(new Card(RankEnum.QUEEN, SuitEnum.HEARTS));
+        cards4.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards4.add(new Card(RankEnum.FIVE, SuitEnum.SPADES));
         Hand hand4 = new Hand(cards4);
         hands.add(hand4);
 
@@ -132,60 +134,60 @@ public class PlayerHandComparatorTest extends TestCase {
 
     public void test2Pairvs2Pair() {
         List<Hand> hands = new ArrayList<Hand>();
-        Card[] cards1 = new Card[7];
+        List<Card> cards1 = new ArrayList<>();
 
-        cards1[0] = new Card(Card.CardRank.ACE, Card.CardSuit.DIAMONDS);
-        cards1[1] = new Card(Card.CardRank.ACE, Card.CardSuit.CLUBS);
-        cards1[2] = new Card(Card.CardRank.NINE, Card.CardSuit.HEARTS);
-        cards1[3] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards1[4] = new Card(Card.CardRank.KING, Card.CardSuit.HEARTS);
-        cards1[5] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards1[6] = new Card(Card.CardRank.JACK, Card.CardSuit.SPADES);
+        cards1.add(new Card(RankEnum.ACE, SuitEnum.DIAMONDS));
+        cards1.add(new Card(RankEnum.ACE, SuitEnum.CLUBS));
+        cards1.add(new Card(RankEnum.NINE, SuitEnum.HEARTS));
+        cards1.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards1.add(new Card(RankEnum.KING, SuitEnum.HEARTS));
+        cards1.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards1.add(new Card(RankEnum.JACK, SuitEnum.SPADES));
         Hand hand1 = new Hand(cards1);
         hands.add(hand1);
 
-        Card[] cards2 = new Card[7];
-        cards2[0] = new Card(Card.CardRank.ACE, Card.CardSuit.DIAMONDS);
-        cards2[1] = new Card(Card.CardRank.ACE, Card.CardSuit.SPADES);
-        cards2[2] = new Card(Card.CardRank.NINE, Card.CardSuit.HEARTS);
-        cards2[3] = new Card(Card.CardRank.FOUR, Card.CardSuit.CLUBS);
-        cards2[4] = new Card(Card.CardRank.FIVE, Card.CardSuit.HEARTS);
-        cards2[5] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards2[6] = new Card(Card.CardRank.JACK, Card.CardSuit.HEARTS);
+        List<Card> cards2 = new ArrayList<>();
+        cards2.add(new Card(RankEnum.ACE, SuitEnum.DIAMONDS));
+        cards2.add(new Card(RankEnum.ACE, SuitEnum.SPADES));
+        cards2.add(new Card(RankEnum.NINE, SuitEnum.HEARTS));
+        cards2.add(new Card(RankEnum.FOUR, SuitEnum.CLUBS));
+        cards2.add(new Card(RankEnum.FIVE, SuitEnum.HEARTS));
+        cards2.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards2.add(new Card(RankEnum.JACK, SuitEnum.HEARTS));
         Hand hand2 = new Hand(cards2);
         hands.add(hand2);
 
-        Card[] cards3 = new Card[7];
-        cards3[0] = new Card(Card.CardRank.ACE, Card.CardSuit.DIAMONDS);
-        cards3[1] = new Card(Card.CardRank.ACE, Card.CardSuit.CLUBS);
-        cards3[2] = new Card(Card.CardRank.FOUR, Card.CardSuit.SPADES);
-        cards3[3] = new Card(Card.CardRank.SEVEN, Card.CardSuit.CLUBS);
-        cards3[4] = new Card(Card.CardRank.SEVEN, Card.CardSuit.HEARTS);
-        cards3[5] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards3[6] = new Card(Card.CardRank.JACK, Card.CardSuit.HEARTS);
+        List<Card> cards3 = new ArrayList<>();
+        cards3.add(new Card(RankEnum.ACE, SuitEnum.DIAMONDS));
+        cards3.add(new Card(RankEnum.ACE, SuitEnum.CLUBS));
+        cards3.add(new Card(RankEnum.FOUR, SuitEnum.SPADES));
+        cards3.add(new Card(RankEnum.SEVEN, SuitEnum.CLUBS));
+        cards3.add(new Card(RankEnum.SEVEN, SuitEnum.HEARTS));
+        cards3.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards3.add(new Card(RankEnum.JACK, SuitEnum.HEARTS));
         Hand hand3 = new Hand(cards3);
         hands.add(hand3);
 
 
-        Card[] cards4 = new Card[7];
-        cards4[0] = new Card(Card.CardRank.TEN, Card.CardSuit.DIAMONDS);
-        cards4[1] = new Card(Card.CardRank.TEN, Card.CardSuit.HEARTS);
-        cards4[2] = new Card(Card.CardRank.JACK, Card.CardSuit.HEARTS);
-        cards4[3] = new Card(Card.CardRank.THREE, Card.CardSuit.CLUBS);
-        cards4[4] = new Card(Card.CardRank.THREE, Card.CardSuit.HEARTS);
-        cards4[5] = new Card(Card.CardRank.NINE, Card.CardSuit.CLUBS);
-        cards4[6] = new Card(Card.CardRank.FIVE, Card.CardSuit.SPADES);
+        List<Card> cards4 = new ArrayList<>();
+        cards4.add(new Card(RankEnum.TEN, SuitEnum.DIAMONDS));
+        cards4.add(new Card(RankEnum.TEN, SuitEnum.HEARTS));
+        cards4.add(new Card(RankEnum.JACK, SuitEnum.HEARTS));
+        cards4.add(new Card(RankEnum.THREE, SuitEnum.CLUBS));
+        cards4.add(new Card(RankEnum.THREE, SuitEnum.HEARTS));
+        cards4.add(new Card(RankEnum.NINE, SuitEnum.CLUBS));
+        cards4.add(new Card(RankEnum.FIVE, SuitEnum.SPADES));
         Hand hand4 = new Hand(cards4);
         hands.add(hand4);
 
-        Card[] cards5 = new Card[7];
-        cards5[0] = new Card(Card.CardRank.TEN, Card.CardSuit.DIAMONDS);
-        cards5[1] = new Card(Card.CardRank.TEN, Card.CardSuit.HEARTS);
-        cards5[2] = new Card(Card.CardRank.JACK, Card.CardSuit.HEARTS);
-        cards5[3] = new Card(Card.CardRank.TWO, Card.CardSuit.CLUBS);
-        cards5[4] = new Card(Card.CardRank.THREE, Card.CardSuit.HEARTS);
-        cards5[5] = new Card(Card.CardRank.THREE, Card.CardSuit.CLUBS);
-        cards5[6] = new Card(Card.CardRank.TWO, Card.CardSuit.SPADES);
+        List<Card> cards5 = new ArrayList<>();
+        cards5.add(new Card(RankEnum.TEN, SuitEnum.DIAMONDS));
+        cards5.add(new Card(RankEnum.TEN, SuitEnum.HEARTS));
+        cards5.add(new Card(RankEnum.JACK, SuitEnum.HEARTS));
+        cards5.add(new Card(RankEnum.TWO, SuitEnum.CLUBS));
+        cards5.add(new Card(RankEnum.THREE, SuitEnum.HEARTS));
+        cards5.add(new Card(RankEnum.THREE, SuitEnum.CLUBS));
+        cards5.add(new Card(RankEnum.TWO, SuitEnum.SPADES));
         Hand hand5 = new Hand(cards5);
         hands.add(hand5);
 

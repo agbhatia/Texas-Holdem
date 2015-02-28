@@ -13,10 +13,10 @@ import java.util.*;
  */
 public class Hand implements Comparable<Hand> {
     private static final int NUM_CARDS = 7;
-    private Card[] cards = new Card[NUM_CARDS];
+    private List<Card> cards = new ArrayList<>(NUM_CARDS);
     private HandEvalResult handEvalResult;
 
-    // This is the list of evaluators that the hand needs to be run throuhg. It is ordered such that
+    // This is the list of evaluators that the hand needs to be run through. It is ordered such that
     // as soon as we find a match, we know that is the highest valued hand we have.
     private static final List<HandEvaluator> handEvaluators = new ArrayList<HandEvaluator>() {{
         add(new StraightFlushEvaluator());
@@ -38,25 +38,24 @@ public class Hand implements Comparable<Hand> {
 
         int i;
         for (i = 0; i < playerCards.length; i++) {
-            cards[i] = playerCards[i];
+            cards.add(playerCards[i]);
         }
 
         for (Card tableCard : tableCards) {
-            cards[i] = tableCard;
-            i++;
+            cards.add(tableCard);
         }
 
         // Sort the cards
-        Arrays.sort(cards);
+        Collections.sort(cards);
     }
 
-    public Hand(Card[] cards) {
-        if (cards.length != NUM_CARDS) {
+    public Hand(List<Card> cards) {
+        if (cards.size() != NUM_CARDS) {
             throw new IllegalArgumentException("Invalid number of cards passed in");
         }
 
         this.cards = cards;
-        Arrays.sort(this.cards);
+        Collections.sort(cards);
     }
 
     /**

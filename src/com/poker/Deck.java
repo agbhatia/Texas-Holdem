@@ -27,8 +27,8 @@ public class Deck {
         // Go through our list of ranks. For each rank, create a card
         // for every suit in our suit enum. Add each combination of
         // rank + suit into our list of cards.
-        for (Card.CardRank rank : Card.CardRank.values()) {
-            for (Card.CardSuit suit : Card.CardSuit.values()) {
+        for (RankEnum rank : RankEnum.values()) {
+            for (SuitEnum suit : SuitEnum.values()) {
                 cards.add(new Card(rank, suit));
             }
         }

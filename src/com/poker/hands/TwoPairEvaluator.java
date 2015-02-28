@@ -1,6 +1,10 @@
 package com.poker.hands;
 
 import com.poker.Card;
+import com.poker.RankEnum;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by atul on 2/25/15.
@@ -17,26 +21,29 @@ public class TwoPairEvaluator extends HandEvaluator {
      * @param cards
      * @return
      */
-    public HandEvalResult evaluate(Card[] cards) {
+    public HandEvalResult evaluate(List<Card> cards) {
         // Find the top 2 pairs in our set of cards.
-        Pair pairs = this.findTopNPairs(cards, 2);
+        List<RankEnum> pairs = this.findTopNPairs(cards, 2);
+        List<RankEnum> scores = new ArrayList<>();
+
         int finalScore = 0;
-        int[] scores = new int[3];
-        boolean isMatch = pairs.foundAllPairs;
+        boolean isMatch = pairs.size() >= 2;
 
         // If we did find 2 pairs, then we simply need to loop through our cards starting from the highest rank
         // (which is at the beginning of the array) and find a card that does not match one of the pairs since
         // we need one kicker. Then, calculate the final score of the two pair.
         if (isMatch) {
-            int[] pairRanks = pairs.pairs;
-            scores[0] = pairRanks[0];
-            scores[1] = pairRanks[1];
+            RankEnum pair1 = pairs.get(0);
+            RankEnum pair2 = pairs.get(1);
+            scores.add(pair1);
+            scores.add(pair2);
+
             for (Card card : cards) {
-                int cardRank = card.rankToInt();
+                RankEnum cardRank = card.getRank();
 
                 // We can use this as a kicker if it is not equal to the ranks of any of our pairs.
-                if ((cardRank != scores[0]) && (cardRank != scores[1])) {
-                    scores[2] = cardRank;
+                if ((!pair1.equalsRank(cardRank)) && (!pair2.equalsRank(cardRank))) {
+                    scores.add(cardRank);
                     break;
                 }
             }

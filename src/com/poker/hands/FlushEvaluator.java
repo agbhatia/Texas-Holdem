@@ -1,12 +1,20 @@
 package com.poker.hands;
 
 import com.poker.Card;
+import com.poker.RankEnum;
+import com.poker.SuitEnum;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by atul on 2/25/15.
  */
 public class FlushEvaluator extends HandEvaluator {
     private static final HandResult handType = HandResult.FLUSH;
+
+    private static final int numRanks = 2;
 
     public FlushEvaluator() {
         super();
@@ -20,33 +28,29 @@ public class FlushEvaluator extends HandEvaluator {
      * @param cards
      * @return
      */
-    public HandEvalResult evaluate(Card[] cards) {
+    public HandEvalResult evaluate(List<Card> cards) {
         // Get cards indexed by suit
-        int[] suitByOccurrences = this.suitsByOccurrences(cards);
-        int maxLength = Card.CardSuit.values().length;
-        int suitOrdinal = -1;
-        int[] scores = new int[5];
+        Map<SuitEnum, Integer> suitByOccurrences = this.suitsByOccurrences(cards);
+        SuitEnum flushSuit = null;
+        List<RankEnum> scores = new ArrayList<>();
         boolean isMatch = false;
-        int index = 0;
         int finalScore = 0;
 
-        // Iterate through our suit indexed array and if we find a suit that has a count >= 5 we have found a match.
-        for (int i = maxLength - 1; i >= 0 ; i--) {
-            if (suitByOccurrences[i] >= 5) {
-                suitOrdinal = i;
+        // Iterate through our suit indexed map and if we find a suit that has a count >= 5 we have found a match.
+        for (SuitEnum suit : SuitEnum.values()) {
+            if (suitByOccurrences.getOrDefault(suit, 0) >= 5) {
+                flushSuit = suit;
                 isMatch = true;
                 break;
             }
         }
 
         // If we found a suit, find the 5 highest cards that match it.
-        if (isMatch) {
+        if (isMatch && flushSuit != null) {
             for (Card card : cards) {
-                int suitRank = card.suitToInt();
-                if (suitRank == suitOrdinal) {
-                    scores[index] = card.rankToInt();
-                    index++;
-                    if (index >= scores.length) {
+                if (flushSuit.equalsSuit(card.getSuit())) {
+                    scores.add(card.getRank());
+                    if (scores.size() >= numRanks) {
                         break;
                     }
                 }

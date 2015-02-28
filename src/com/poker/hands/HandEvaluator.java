@@ -1,6 +1,13 @@
 package com.poker.hands;
 
 import com.poker.Card;
+import com.poker.RankEnum;
+import com.poker.SuitEnum;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by atul on 2/25/15.
@@ -10,7 +17,7 @@ import com.poker.Card;
  */
 public abstract class HandEvaluator {
 
-    abstract public HandEvalResult evaluate(Card[] cards);
+    abstract public HandEvalResult evaluate(List<Card> cards);
 
     private static final int[] SCORING_WEIGHT = {13*13*13*13, 13*13*13, 13*13, 13, 1};
 
@@ -20,50 +27,53 @@ public abstract class HandEvaluator {
      * identifying hand sequences. Also because the ranks are from low to high, we know that the
      * highest ranked cards are at the end. So if we traverse the list backwards we can easily find
      * the first card that is repeated two times.
-     * @param cards: Array of cards to analyze
-     * @return: Array of cards indexed by rank and valued by appearances.
+     * @param cards: List of cards to analyze
+     * @return: Map(RankEnum, Integer) rankEnum tells us info about the card, and integer is the num
+     * of occurrences that rank shows up in our list of cards.
      */
-    protected int[] ranksByOccurrences(Card[] cards) {
-        int[] returnVal = new int[Card.CardRank.values().length];
+    protected Map<RankEnum, Integer> ranksByOccurrences(List<Card> cards) {
+        Map<RankEnum, Integer> returnVal = new HashMap<>(RankEnum.numRanks());
         for (Card card : cards) {
-            returnVal[card.rankToInt()]++;
+            // Check to see if this rank is already in our map. If so, increment 1 to the count, else set
+            // the count to 1.
+            returnVal.compute(card.getRank(), (tokenKey, oldValue) -> oldValue == null ? 1 : oldValue + 1);
         }
         return returnVal;
     }
 
     /**
-     * Return an array of the cards where the index is the card suit as an integer, and the value is
-     * a count of the appearances of that suit in the card set. The use case here is for identifying flushes.
-     * @param cards
-     * @return
+     * Return an Map of the cards where the key is the card suit, and the value is a count of the appearances
+     * of that suit in the card set. The use case here is for identifying flushes.
+     * @param cards: List of cards
+     * @return Map(SuitEnum, Integer)
      */
-    protected int[] suitsByOccurrences(Card[] cards) {
-        int[] returnVal = new int[Card.CardSuit.values().length];
+    protected Map<SuitEnum, Integer> suitsByOccurrences(List<Card> cards) {
+        Map<SuitEnum, Integer> returnVal = new HashMap<>(SuitEnum.numSuits());
         for (Card card : cards) {
-            returnVal[card.suitToInt()]++;
+            returnVal.compute(card.getSuit(), (tokenKey, oldValue) -> oldValue == null ? 1 : oldValue + 1);
         }
         return returnVal;
     }
 
     /**
      * Find the highest card rank that shows up as least numDuplicates amount of times in our card set.
-     * This function leverages the ability of indexing the cards by rank int where the value is the num
+     * This function uses our map of ranks which is keyed by rank and the value is the number of
      * of appearances. We created this function for the usages of calculating three of a kind / four of a
      * kind.
      * @param cards
      * @param numDuplicates
      * @return
      */
-    protected int findHighestDuplicate(Card[] cards, int numDuplicates) {
-        int[] ranksByOccurrences = ranksByOccurrences(cards);
-        int numRanks = Card.CardRank.values().length;
-        for (int i = numRanks - 1; i > 0; i--) {
-            if (ranksByOccurrences[i] == numDuplicates) {
-                return i;
+    protected RankEnum findHighestDuplicate(List<Card> cards, int numDuplicates) {
+        Map<RankEnum, Integer> ranksByOccurrences = ranksByOccurrences(cards);
+        // We loop through our rank enums which we know is in order from highest to lowest. This way we can get
+        // the highest first.
+        for (RankEnum rank : RankEnum.values()) {
+            if (ranksByOccurrences.getOrDefault(rank, 0) == numDuplicates) {
+                return rank;
             }
         }
-        return -1;
-
+        return null;
     }
 
     /**
@@ -74,14 +84,16 @@ public abstract class HandEvaluator {
      * highest card has a higher value it should always win, regardless of what the other cards are. That is why
      * we use a weighting system with powers of 13 (since there are 13 cards of each suit) so that even if another hand
      * has a higher 2nd/3rd value if the 1st value is lower it will return a lower score no matter what.
-     * @param scores: int[] of scores that need to be weighted.
+     * @param scores: List of scores that need to be weighted.
      * @return: int score
      */
-    protected int calculateScore(int[] scores) {
+    protected int calculateScore(List<RankEnum> scores) {
         int result = 0;
-        // traverse through the scores and weight them appropriately.
-        for (int i = 0; i < scores.length; i++) {
-            result += scores[i]*SCORING_WEIGHT[i];
+        int i = -1;
+        // traverse through the scores and weigh them appropriately.
+        for (RankEnum rank : scores) {
+            i++;
+            result += rank.getValue()*SCORING_WEIGHT[i];
         }
         return result;
     }
@@ -91,39 +103,24 @@ public abstract class HandEvaluator {
      * for finding the pair in the full house evaluator.
      * @param cards
      * @param numPairs
-     * @return: Pair object that contains the list of pairs and if we were able to find all the pairs we were
-     * looking for.
+     * @return: List of pairs up to the num pairs expected.
      */
-    protected Pair findTopNPairs(Card[] cards, int numPairs) {
-        int[] pairs = new int[numPairs];
-        int foundPairs = 0;
+    protected List<RankEnum> findTopNPairs(List<Card> cards, int numPairs) {
+        List<RankEnum> pairs = new ArrayList<>();
 
-        // First we index our cards such that rank id is index, and value is # appearances.
-        // Then we start searching backwards starting at the highest rank and find up to n
-        // values where the num appearances = 2.
-        int[] ranksByOccurrences = ranksByOccurrences(cards);
-        int numRanks = Card.CardRank.values().length;
-        for (int i = numRanks - 1; i > 0; i--) {
-            if (foundPairs == numPairs) break;
+        // First we map our cards such that rank id is keyed, and value is # appearances.
+        // Then we start searching traverse through our list of ranks where the highest
+        // rank is first and find up to n values where the num appearances = 2.
+        Map<RankEnum, Integer> ranksByOccurrences = ranksByOccurrences(cards);
+        for (RankEnum rank : RankEnum.values()) {
+            if (pairs.size() == numPairs) break;
 
-            if (ranksByOccurrences[i] == 2) {
-                pairs[foundPairs] = i;
-                foundPairs++;
+            if (ranksByOccurrences.getOrDefault(rank, 0) == 2) {
+                pairs.add(rank);
             }
         }
 
-        Pair returnVal = new Pair();
-        returnVal.pairs = pairs;
-        returnVal.foundAllPairs = foundPairs == numPairs;
-        return returnVal;
-    }
-
-    /**
-     * Container class for information regarding pairs and num pairs found.
-     */
-    protected class Pair {
-        int[] pairs;
-        boolean foundAllPairs;
+        return pairs;
     }
 }
 

@@ -9,82 +9,44 @@ import java.util.Comparator;
  */
 public class Card implements Comparable<Card>{
 
-    private CardRank rank;
-    private CardSuit suit;
-
-    public enum CardRank {
-        TWO,
-        THREE,
-        FOUR,
-        FIVE,
-        SIX,
-        SEVEN,
-        EIGHT,
-        NINE,
-        TEN,
-        JACK,
-        QUEEN,
-        KING,
-        ACE
-    }
-
-    /**
-     * This String array is used to map an enum to a string representation of the rank.
-     */
-    public static final String[] RANK_STRING = {
-            "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"
-    };
-
-    public enum CardSuit {
-        DIAMONDS,
-        CLUBS,
-        HEARTS,
-        SPADES
-    }
-
-    /**
-     * The suit symbols (use the suit enum to map into this).
-     */
-    public static final char[] SUIT_STRING = { 'd', 'c', 'h', 's' };
+    private RankEnum rank;
+    private SuitEnum suit;
 
     /**
      *
      * @param rank: rankEnum
      * @param suit: suitEnum
      */
-    public Card(CardRank rank, CardSuit suit) {
+    public Card(RankEnum rank, SuitEnum suit) {
         this.rank = rank;
         this.suit = suit;
     }
 
-    public CardRank getRank() {
+    public RankEnum getRank() {
         return rank;
     }
 
-    public CardSuit getSuit() {
+    public SuitEnum getSuit() {
         return suit;
     }
 
     public String toString() {
-        return String.format("%s%s", RANK_STRING[rank.ordinal()], SUIT_STRING[suit.ordinal()]);
+        return rank.toString() + suit.toString();
     }
 
     public int rankToInt() {
-        return rank.ordinal();
+        return rank.getValue();
     }
 
     public int suitToInt() {
-        return suit.ordinal();
+        return suit.getValue();
     }
 
     @Override
     public int hashCode() {
-        return ((rankToInt() * CardSuit.values().length) + suitToInt());
+        return ((rankToInt() * SuitEnum.numSuits()) + suitToInt());
     }
 
-    public int codeBySuit() {
-        return ((suitToInt() * CardRank.values().length) + rankToInt());
-    }
 
     @Override
     public int compareTo(Card card) {
@@ -97,10 +59,6 @@ public class Card implements Comparable<Card>{
     /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Card) {
-            return ((Card) obj).hashCode() == hashCode();
-        } else {
-            return false;
-        }
+        return (obj instanceof Card) && (obj.hashCode() == hashCode());
     }
 }

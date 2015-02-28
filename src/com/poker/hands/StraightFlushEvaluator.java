@@ -1,6 +1,11 @@
 package com.poker.hands;
 
 import com.poker.Card;
+import com.poker.RankEnum;
+import com.poker.SuitEnum;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by atul on 2/25/15.
@@ -25,19 +30,18 @@ public class StraightFlushEvaluator extends HandEvaluator {
      * @param cards
      * @return
      */
-    public HandEvalResult evaluate(Card[] cards) {
-        int[] suitByOccurrences = this.suitsByOccurrences(cards);
-        int maxLength = Card.CardSuit.values().length;
-        int suitOrdinal = -1;
+    public HandEvalResult evaluate(List<Card> cards) {
+        Map<SuitEnum, Integer> suitByOccurrences = this.suitsByOccurrences(cards);
+        SuitEnum flushSuit = null;
         boolean isMatch = false;
         int finalScore = 0;
         HandResult result = HandResult.STRAIGHT_FLUSH;
 
-        // Iterate through our suit indexed array and if we find a suit that has a count >= 5 we have found a match for
+        // Iterate through our suit indexed map and if we find a suit that has a count >= 5 we have found a match for
         // a flush.
-        for (int i = maxLength - 1; i >= 0 ; i--) {
-            if (suitByOccurrences[i] >= 5) {
-                suitOrdinal = i;
+        for (SuitEnum suit : SuitEnum.values()) {
+            if (suitByOccurrences.getOrDefault(suit, 0) >= 5) {
+                flushSuit = suit;
                 isMatch = true;
                 break;
             }
@@ -48,31 +52,30 @@ public class StraightFlushEvaluator extends HandEvaluator {
 
         if (isMatch) {
             // Now that we found the flush, look for our straight.
-            int lastRank = -1;
-            int rank = -1;
+            RankEnum lastRank = null;
+            RankEnum rank;
             int straightCount = 0;
-            int straightRank = -1;
+            RankEnum straightRank = null;
 
             // Loop through our cards from highest index first.
             for (Card card : cards) {
                 // Check to see if the suit of this card matches the suit of the flush we found.
-                int suitRank = card.suitToInt();
-                if (suitRank == suitOrdinal) {
+                SuitEnum cardSuit = card.getSuit();
+                if (flushSuit.equalsSuit(cardSuit)) {
                     // If so, start checking for a straight. We initially check to see if we have an ace of this suit
                     // to handle dealing with the wheel straight (a, 2, 3, 4, 5).
-                    if (card.getRank() == Card.CardRank.ACE) {
+                    if (card.getRank().equalsRank(RankEnum.ACE)) {
                         hasAceInFlush = true;
                     }
 
                     // If the last rank is -1 it means we don't have any previous cards in a straight yet.
-                    if (lastRank == -1) {
-                        lastRank = card.rankToInt();
+                    if (lastRank == null) {
+                        lastRank = card.getRank();
                     } else {
                         // If last rank has a positive value that means we started a straight. Check this card to see
                         // if it is consecutive with the previous one.
-                        rank = card.rankToInt();
-                        int diff = lastRank - rank;
-                        if (diff == 1) {
+                        rank = card.getRank();
+                        if (lastRank.isConsecutive(rank)) {
                             // If it is consecutive, increment the counter. If the count was set to 0, set it to 2 now
                             // since we have the previous card and this one.
                             if (straightCount == 0) {
@@ -89,34 +92,35 @@ public class StraightFlushEvaluator extends HandEvaluator {
                             lastRank = rank;
                         } else {
                             // This card was not 1 off -- reset our variables and keep looking.
-                            lastRank = -1;
-                            rank = -1;
+                            lastRank = null;
                             straightCount = 0;
-                            straightRank = -1;
+                            straightRank = null;
                         }
                     }
-                } else if (lastRank != -1) {
-                    rank = card.rankToInt();
-                    int diff = lastRank - rank;
-                    if (diff > 1) {
-                        lastRank = -1;
+                } else if (lastRank != null) {
+                    // If this card wasn't part of the suit, check to see if the card was more than 1 away
+                    // from the last card in in the straight sequence. If it is more than away reset the
+                    // straight. This could be because we have duplicate cards, but some of the duplicates
+                    // are not part of the flush.
+                    rank = card.getRank();
+                    if (!lastRank.isConsecutive(rank) && !lastRank.equalsRank(rank)) {
+                        lastRank = null;
                     }
                 }
             }
 
             // for straight flushes, since all the cards are in sequence, we only need the value of the highest
             // card in the straight. that will suffice for the score.
-            finalScore = straightRank;
-            if (hasStraightFlush && (finalScore == Card.CardRank.ACE.ordinal())) {
+            finalScore = (straightRank == null) ? 0 : straightRank.getValue();
+            if (hasStraightFlush && (finalScore == RankEnum.ACE.getValue())) {
                 result = HandResult.ROYAL_FLUSH;
             }
 
             // check to see if we are one away from a straight and the highest rank of the straight is the five.
             // if this is the case then we have a straight flush with the wheel.
-            if ((straightRank == Card.CardRank.FIVE.ordinal()) && (straightCount == 4)) {
-                int[] ranksByOccurrence = this.ranksByOccurrences(cards);
-                hasStraightFlush = ((ranksByOccurrence[Card.CardRank.ACE.ordinal()] > 0) && hasAceInFlush);
-
+            if ((finalScore == RankEnum.FIVE.getValue()) && (straightCount == 4)) {
+                Map<RankEnum, Integer> ranksByOccurrence = this.ranksByOccurrences(cards);
+                hasStraightFlush = ((ranksByOccurrence.getOrDefault(RankEnum.ACE, 0) > 0) && hasAceInFlush);
             }
         }
         return new HandEvalResult(hasStraightFlush, result, finalScore);
