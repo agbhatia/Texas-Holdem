@@ -7,6 +7,8 @@ print out the current status of the game (pot size, bet amounts, etc).
 
 ### Running
 
+This application requires Java 8.
+
 To run the application you simply need to run the `Main.java` class. When the application starts up, it will ask you
 how many players to include in the game. One of those players will be a human player that you get to control.
 

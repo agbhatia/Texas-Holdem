@@ -31,9 +31,9 @@ public abstract class HandEvaluator {
      * @return: Map(RankEnum, Integer) rankEnum tells us info about the card, and integer is the num
      * of occurrences that rank shows up in our list of cards.
      */
-    protected Map<RankEnum, Integer> ranksByOccurrences(List<Card> cards) {
+    protected Map<RankEnum, Integer> ranksByOccurrences(List<Card> hand) {
         Map<RankEnum, Integer> returnVal = new HashMap<>(RankEnum.numRanks());
-        for (Card card : cards) {
+        for (Card card : hand) {
             // Check to see if this rank is already in our map. If so, increment 1 to the count, else set
             // the count to 1.
             returnVal.compute(card.getRank(), (tokenKey, oldValue) -> oldValue == null ? 1 : oldValue + 1);
@@ -64,8 +64,8 @@ public abstract class HandEvaluator {
      * @param numDuplicates
      * @return
      */
-    protected RankEnum findHighestDuplicate(List<Card> cards, int numDuplicates) {
-        Map<RankEnum, Integer> ranksByOccurrences = ranksByOccurrences(cards);
+    protected RankEnum findHighestDuplicate(List<Card> hand, int numDuplicates) {
+        Map<RankEnum, Integer> ranksByOccurrences = ranksByOccurrences(hand);
         // We loop through our rank enums which we know is in order from highest to lowest. This way we can get
         // the highest first.
         for (RankEnum rank : RankEnum.values()) {
@@ -105,13 +105,13 @@ public abstract class HandEvaluator {
      * @param numPairs
      * @return: List of pairs up to the num pairs expected.
      */
-    protected List<RankEnum> findTopNPairs(List<Card> cards, int numPairs) {
+    protected List<RankEnum> findTopNPairs(List<Card> hand, int numPairs) {
         List<RankEnum> pairs = new ArrayList<>();
 
         // First we map our cards such that rank id is keyed, and value is # appearances.
         // Then we start searching traverse through our list of ranks where the highest
         // rank is first and find up to n values where the num appearances = 2.
-        Map<RankEnum, Integer> ranksByOccurrences = ranksByOccurrences(cards);
+        Map<RankEnum, Integer> ranksByOccurrences = ranksByOccurrences(hand);
         for (RankEnum rank : RankEnum.values()) {
             if (pairs.size() == numPairs) break;
 
